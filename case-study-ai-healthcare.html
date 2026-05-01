@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: AI-Powered Healthcare Diagnostics - Bayonet Technologies</title>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'], display: ['Space Grotesk', 'Inter', 'ui-sans-serif'] },
+          colors: {
+            primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+            dark: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white font-sans text-dark-800">
+  <header>
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="index.html#home" class="flex items-center gap-3">
+            <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+              <svg viewBox="0 0 48 48" fill="none" class="w-5 h-5"><path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="white"/></svg>
+            </div>
+            <span class="text-xl font-bold font-display">Bayonet Technologies</span>
+          </a>
+          <nav class="hidden md:flex items-center gap-8">
+            <a href="index.html#home" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">Home</a>
+            <a href="index.html#services" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">Services</a>
+            <a href="index.html#about" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">About</a>
+            <a href="index.html#case-studies" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">Case Studies</a>
+            <a href="index.html#blog" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">Blog</a>
+            <a href="index.html#contact" class="nav-link text-sm font-medium hover:text-primary-600 transition-colors py-2">Contact</a>
+          </nav>
+          <a href="index.html#contact" class="hidden md:flex btn-primary text-sm">Get Started</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="pt-32 pb-20">
+    <article class="max-w-4xl mx-auto px-6 lg:px-8">
+      <div class="mb-12 text-center reveal">
+        <span class="section-tag mb-4">Case Study</span>
+        <h1 class="text-4xl md:text-5xl font-black font-display mb-6">AI-Powered Healthcare Diagnostics</h1>
+        <p class="text-dark-600 text-lg">Industry: Healthcare • Duration: 8 Months</p>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <img src="images/case_ai_healthcare.png" alt="AI-Powered Healthcare Diagnostics" class="w-full h-[400px] object-cover rounded-3xl mb-12 shadow-lg">
+      </div>
+      <div class="prose prose-lg max-w-none text-dark-700 space-y-6 leading-relaxed reveal reveal-delay-2">
+        <h2 class="text-3xl font-bold text-dark-900 mt-12 mb-4">The Challenge</h2>
+        <p>A leading regional hospital network was facing a significant backlog in radiology image analysis. The manual review process was time-consuming, prone to human fatigue, and delayed critical patient diagnoses, ultimately affecting patient outcomes.</p>
+        
+        <h2 class="text-3xl font-bold text-dark-900 mt-12 mb-4">Our Solution</h2>
+        <p>Bayonet Technologies partnered with the hospital's radiology team to develop a custom AI-driven diagnostic tool. We trained a deep learning computer vision model using thousands of anonymized historical scans to identify subtle anomalies, such as early-stage tumors and micro-fractures, with high precision.</p>
+        
+        <h2 class="text-3xl font-bold text-dark-900 mt-12 mb-4">The Implementation</h2>
+        <p>The solution was seamlessly integrated into their existing PACS (Picture Archiving and Communication System). Rather than replacing radiologists, the AI acted as a "second set of eyes," automatically flagging high-risk scans for immediate human review and prioritizing the daily workflow.</p>
+
+        <h2 class="text-3xl font-bold text-dark-900 mt-12 mb-4">The Results</h2>
+        <ul class="list-disc pl-6 space-y-3">
+          <li><strong>40% Reduction</strong> in average scan review time.</li>
+          <li><strong>98.5% Accuracy</strong> in detecting early-stage anomalies, matching top specialists.</li>
+          <li><strong>Zero Backlog:</strong> The hospital cleared its 3-week backlog within the first two months of deployment.</li>
+        </ul>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-dark-900 text-white py-16 mt-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-gray-400 text-sm">&copy; 2026 Bayonet Technologies. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
