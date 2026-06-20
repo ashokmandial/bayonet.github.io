@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate and customize professional, print-ready letterheads for Bayonet Technologies.">
+  <title>Bayonet Technologies — Letterhead Generator</title>
+  
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            display: ['Space Grotesk', 'Inter', 'ui-sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            signature: ['Caveat', 'cursive']
+          },
+          colors: {
+            primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+            dark: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Dot background for the preview workshop */
+    .editor-grid-bg {
+      background-color: #0f172a;
+      background-image: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+
+    /* Print media styling */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+
+      .print-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 210mm !important; /* A4 standard width */
+        height: 297mm !important; /* A4 standard height */
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 20mm !important; /* Proper printing margins */
+        background: white !important;
+        overflow: hidden !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+
+    /* Preview Page Mockup (Standard A4 Aspect Ratio 1:1.414) */
+    .a4-preview {
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 1 / 1.414;
+      background: white;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Custom Scrollbar for Workspace */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+
+<body class="h-full flex flex-col overflow-hidden bg-dark-900 font-sans text-slate-100">
+
+  <!-- ── TOP BAR (NO-PRINT) ── -->
+  <header class="no-print h-16 border-b border-dark-800 bg-dark-950 px-6 flex items-center justify-between z-10">
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors" aria-label="Back to home">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="text-sm font-medium hidden sm:inline">Home</span>
+      </a>
+      <div class="h-6 w-px bg-dark-800"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
+          <svg viewBox="0 0 48 48" fill="none" class="w-5 h-5">
+            <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="white" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-white">Bayonet</span>
+          <span class="text-xs text-slate-400 block -mt-1 font-semibold uppercase tracking-wider">Letterhead Tool</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition-all text-white rounded-lg font-semibold text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Print / Save PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN WORKSPACE ── -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- ── LEFT CONTROL PANEL (NO-PRINT) ── -->
+    <aside class="no-print w-96 flex-shrink-0 bg-dark-950 border-r border-dark-800 flex flex-col overflow-y-auto">
+      
+      <!-- Presets Selector -->
+      <div class="p-6 border-b border-dark-800 bg-dark-900/50">
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">Template Preset</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="loadPreset('offer')" class="preset-btn px-2 py-2 text-xs font-medium bg-dark-800 hover:bg-dark-700 rounded border border-dark-700 transition text-center text-slate-200">
+            Offer Letter
+          </button>
+          <button onclick="loadPreset('proposal')" class="preset-btn px-2 py-2 text-xs font-medium bg-dark-800 hover:bg-dark-700 rounded border border-dark-700 transition text-center text-slate-200">
+            Proposal
+          </button>
+          <button onclick="loadPreset('memo')" class="preset-btn px-2 py-2 text-xs font-medium bg-dark-800 hover:bg-dark-700 rounded border border-dark-700 transition text-center text-slate-200">
+            Memo
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings & Customization accordion/list -->
+      <div class="p-6 space-y-6 flex-1">
+        
+        <!-- Style Layout Theme -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Header & Footer Design</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-3 p-3 bg-dark-900/60 rounded-lg border border-dark-800 hover:border-dark-700 cursor-pointer transition">
+              <input type="radio" name="designTheme" value="modern" checked onchange="updateDesignTheme(this.value)" class="text-indigo-600 focus:ring-indigo-500 bg-dark-950 border-dark-700">
+              <div>
+                <span class="text-sm font-semibold block text-slate-200">Modern Wave</span>
+                <span class="text-xs text-slate-400 block">Sleek top & bottom gradient bars</span>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-dark-900/60 rounded-lg border border-dark-800 hover:border-dark-700 cursor-pointer transition">
+              <input type="radio" name="designTheme" value="tech" onchange="updateDesignTheme(this.value)" class="text-indigo-600 focus:ring-indigo-500 bg-dark-950 border-dark-700">
+              <div>
+                <span class="text-sm font-semibold block text-slate-200">Tech Clean</span>
+                <span class="text-xs text-slate-400 block">Grid header lines with vertical accents</span>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-dark-900/60 rounded-lg border border-dark-800 hover:border-dark-700 cursor-pointer transition">
+              <input type="radio" name="designTheme" value="classic" onchange="updateDesignTheme(this.value)" class="text-indigo-600 focus:ring-indigo-500 bg-dark-950 border-dark-700">
+              <div>
+                <span class="text-sm font-semibold block text-slate-200">Executive Minimalist</span>
+                <span class="text-xs text-slate-400 block">Centered classical structure & neat borders</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Color Accents -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Branding Accent Color</label>
+          <div class="flex gap-4">
+            <button onclick="updateAccentColor('indigo')" class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 ring-2 ring-offset-2 ring-offset-dark-950 ring-indigo-500 transition-transform hover:scale-105" id="color-indigo" title="Bayonet Royal"></button>
+            <button onclick="updateAccentColor('emerald')" class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 ring-0 ring-offset-2 ring-offset-dark-950 ring-emerald-500 transition-transform hover:scale-105" id="color-emerald" title="Tech Emerald"></button>
+            <button onclick="updateAccentColor('slate')" class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-600 to-slate-800 ring-0 ring-offset-2 ring-offset-dark-950 ring-slate-400 transition-transform hover:scale-105" id="color-slate" title="Corporate Carbon"></button>
+          </div>
+        </div>
+
+        <!-- Font Toggle -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">Body Font Face</label>
+          <select id="fontSelect" onchange="updateFont(this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+            <option value="font-sans">Inter (Modern & Professional)</option>
+            <option value="font-display">Space Grotesk (Tech & Futuristic)</option>
+            <option value="font-serif">Lora (Formal Editorial)</option>
+          </select>
+        </div>
+
+        <!-- Spacing & Typography Details -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Font Size</label>
+            <select id="fontSizeSelect" onchange="updateFontSize(this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+              <option value="text-xs">Small (12px)</option>
+              <option value="text-sm" selected>Medium (14px)</option>
+              <option value="text-base">Large (16px)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Line Spacing</label>
+            <select id="lineHeightSelect" onchange="updateLineHeight(this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+              <option value="leading-relaxed" selected>Relaxed</option>
+              <option value="leading-loose">Loose</option>
+              <option value="leading-normal">Compact</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Watermark Slider -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Watermark Opacity</label>
+            <span id="watermarkVal" class="text-xs text-slate-500">3%</span>
+          </div>
+          <input type="range" min="0" max="15" value="3" oninput="updateWatermark(this.value)" class="w-full h-1 bg-dark-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+        </div>
+
+        <!-- Blank Letterhead Toggle -->
+        <div>
+          <label class="flex items-center justify-between p-3 bg-dark-900/60 rounded-lg border border-dark-800 hover:border-dark-700 transition cursor-pointer">
+            <div>
+              <span class="text-sm font-semibold block text-slate-200">Print Blank Letterhead</span>
+              <span class="text-xs text-slate-400 block">Hide letter contents and signature</span>
+            </div>
+            <input type="checkbox" id="blankModeToggle" onchange="toggleBlankMode(this.checked)" class="text-indigo-600 focus:ring-indigo-500 bg-dark-950 border-dark-700 rounded w-5 h-5">
+          </label>
+        </div>
+
+        <div class="border-t border-dark-800 my-4 pt-4"></div>
+
+        <!-- Letter Details (Forms) -->
+        <div id="letterDetailsSection" class="space-y-4">
+          <h4 class="text-sm font-bold text-slate-300">Letter Details</h4>
+          
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Date & Reference</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input type="text" id="inputDate" value="June 20, 2026" oninput="syncText('date', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Date">
+              <input type="text" id="inputRef" value="REF: BT-2026-092" oninput="syncText('ref', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ref Num">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Recipient Info</label>
+            <input type="text" id="inputRecipName" value="Jane Doe" oninput="syncText('recipName', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-t-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Recipient Name">
+            <input type="text" id="inputRecipTitle" value="Senior Software Engineer" oninput="syncText('recipTitle', this.value)" class="w-full bg-dark-900 border border-dark-800 py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Title">
+            <input type="text" id="inputRecipCompany" value="Technology Solutions Ltd" oninput="syncText('recipCompany', this.value)" class="w-full bg-dark-900 border border-dark-800 py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Company">
+            <textarea id="inputRecipAddr" rows="2" oninput="syncText('recipAddr', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-b-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 resize-none" placeholder="Full Address">123 Innovators Blvd, Suite 400
+Silicon Valley, CA 94025</textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Subject Line</label>
+            <input type="text" id="inputSubject" value="Subject: Offer of Employment - Senior Software Engineer" oninput="syncText('subject', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Subject">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Letter Body</label>
+            <textarea id="inputBody" rows="8" oninput="syncBody(this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 font-mono" placeholder="Write letter content here. Standard paragraphs separate by blank lines."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Signatory Details</label>
+            <input type="text" id="inputSignName" value="Ashok Mandial" oninput="syncText('signName', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-t-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Signatory Name">
+            <input type="text" id="inputSignTitle" value="Chief Executive Officer" oninput="syncText('signTitle', this.value)" class="w-full bg-dark-900 border border-dark-800 py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Signatory Title">
+            <input type="text" id="inputSignText" value="A. Mandial" oninput="syncText('signText', this.value)" class="w-full bg-dark-900 border border-dark-800 rounded-b-lg py-2 px-3 text-xs text-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Signature text (for handwriting script)">
+          </div>
+
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── RIGHT SIDE: DYNAMIC CANVAS PREVIEW ── -->
+    <main class="flex-1 overflow-y-auto p-8 flex justify-center items-start editor-grid-bg relative">
+      
+      <!-- Screen-only helper tag -->
+      <div class="no-print absolute top-3 left-4 text-xs font-medium text-slate-500 bg-dark-950/80 px-3 py-1.5 rounded-full border border-dark-800 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Interactive A4 Preview Frame (Double click text in the preview to edit inline!)
+      </div>
+
+      <!-- Letterhead Page Print Target -->
+      <article id="printPage" class="print-area a4-preview p-16 flex flex-col justify-between text-slate-800 select-text overflow-hidden transition-all duration-300">
+        
+        <!-- Watermark Container -->
+        <div id="watermark" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03] transition-opacity duration-300">
+          <svg viewBox="0 0 48 48" fill="none" class="w-[300px] h-[300px] text-indigo-900" style="color: currentColor;">
+            <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor" />
+          </svg>
+        </div>
+
+        <!-- ── HEADER SECTION ── -->
+        <div id="headerWrapper">
+          
+          <!-- Modern Theme Header -->
+          <div id="theme-header-modern" class="flex flex-col gap-6">
+            <div class="flex items-center justify-between border-b pb-6 border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="logo-box w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md">
+                  <svg viewBox="0 0 48 48" fill="none" class="w-6 h-6">
+                    <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="white" />
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="text-xl font-bold tracking-tight text-slate-900 font-display">Bayonet Technologies</h1>
+                  <span class="text-xs font-semibold text-indigo-600 tracking-wider uppercase brand-accent-text">Custom Software & AI Solutions</span>
+                </div>
+              </div>
+              <div class="text-right text-[10px] text-slate-400 font-medium">
+                <p class="font-bold text-slate-600">OFFICIAL CORRESPONDENCE</p>
+                <p>DOC-ID: <span id="ref-header">BT-2026-092</span></p>
+              </div>
+            </div>
+            <!-- Dynamic color accent line -->
+            <div class="h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full brand-accent-gradient -mt-6"></div>
+          </div>
+
+          <!-- Tech Clean Header -->
+          <div id="theme-header-tech" class="hidden flex-col gap-4">
+            <div class="grid grid-cols-12 border-b border-slate-200">
+              <div class="col-span-8 py-4 border-r border-slate-100 pr-4">
+                <div class="flex items-center gap-3">
+                  <div class="logo-box w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center">
+                    <svg viewBox="0 0 48 48" fill="none" class="w-5 h-5">
+                      <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="white" />
+                    </svg>
+                  </div>
+                  <h1 class="text-lg font-bold text-slate-900 font-display tracking-tight">Bayonet Technologies</h1>
+                </div>
+              </div>
+              <div class="col-span-4 pl-4 py-4 flex items-center justify-end text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+                <span>Secure System Link</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Executive Classic Header -->
+          <div id="theme-header-classic" class="hidden flex-col items-center gap-3 text-center border-b pb-6 border-slate-200">
+            <div class="logo-box w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow">
+              <svg viewBox="0 0 48 48" fill="none" class="w-7 h-7">
+                <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="white" />
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-2xl font-semibold tracking-tight text-slate-900 font-serif">Bayonet Technologies</h1>
+              <p class="text-[10px] uppercase tracking-[0.2em] font-medium text-slate-500 mt-1">Enterprise Systems & engineering division</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── BODY CONTENT AREA ── -->
+        <div class="flex-1 flex flex-col justify-start mt-10" id="letterBodyContainer">
+          
+          <!-- Date / Ref Block -->
+          <div class="flex justify-between items-baseline text-xs text-slate-500 mb-8 font-medium">
+            <time id="date" contenteditable="true" onblur="syncInput('inputDate', this.innerText)"></time>
+            <span id="ref" contenteditable="true" onblur="syncInput('inputRef', this.innerText)"></span>
+          </div>
+
+          <!-- Recipient Block -->
+          <address class="not-italic text-xs text-slate-600 mb-8 space-y-1 block max-w-sm">
+            <p class="font-bold text-slate-900 text-sm" id="recipName" contenteditable="true" onblur="syncInput('inputRecipName', this.innerText)"></p>
+            <p id="recipTitle" contenteditable="true" onblur="syncInput('inputRecipTitle', this.innerText)"></p>
+            <p id="recipCompany" contenteditable="true" onblur="syncInput('inputRecipCompany', this.innerText)"></p>
+            <p id="recipAddr" class="whitespace-pre-line text-slate-500 mt-1" contenteditable="true" onblur="syncInput('inputRecipAddr', this.innerText)"></p>
+          </address>
+
+          <!-- Subject Line -->
+          <h2 class="text-sm font-bold text-slate-900 mb-6 border-l-2 pl-3 border-indigo-600 brand-accent-border font-display" id="subject" contenteditable="true" onblur="syncInput('inputSubject', this.innerText)"></h2>
+
+          <!-- Actual Letter Body Text -->
+          <div id="bodyText" class="text-sm leading-relaxed text-slate-700 font-sans space-y-4 outline-none select-text" contenteditable="true" onblur="syncInput('inputBody', this.innerText)">
+            <!-- Injected by preset loader -->
+          </div>
+
+          <!-- ── SIGNATURE BLOCK ── -->
+          <div class="mt-12 block avoid-break">
+            <p class="text-xs text-slate-500 font-medium">Sincerely,</p>
+            
+            <!-- Handwritten text representation -->
+            <div class="h-14 flex items-center pl-2 my-1">
+              <span id="signText" class="font-signature text-3xl text-indigo-600 brand-accent-text transform -rotate-3 select-none"></span>
+            </div>
+            
+            <div class="text-xs text-slate-800 space-y-0.5">
+              <p class="font-bold" id="signName" contenteditable="true" onblur="syncInput('inputSignName', this.innerText)"></p>
+              <p class="text-slate-500" id="signTitle" contenteditable="true" onblur="syncInput('inputSignTitle', this.innerText)"></p>
+              <p class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase mt-1">Bayonet Technologies</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── FOOTER SECTION ── -->
+        <div id="footerWrapper" class="mt-8 border-t border-slate-100 pt-6">
+          
+          <!-- Modern Theme Footer -->
+          <div id="theme-footer-modern" class="grid grid-cols-4 gap-4 text-[10px] text-slate-500 font-medium">
+            <div class="col-span-2">
+              <p class="font-bold text-slate-800 mb-0.5">Office Address</p>
+              <p class="text-slate-400">#4102, Sunny Enclave, Sector 125<br>Kharar, Mohali 140301</p>
+            </div>
+            <div>
+              <p class="font-bold text-slate-800 mb-0.5">Contact Us</p>
+              <p class="text-slate-400">P: +91 8360109185</p>
+              <p class="text-slate-400">E: info@bayonettech.in</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-slate-800 mb-0.5">Web Portal</p>
+              <a href="https://bayonettech.in" target="_blank" class="text-indigo-600 brand-accent-text hover:underline block font-semibold">bayonettech.in</a>
+            </div>
+          </div>
+
+          <!-- Tech Clean Footer -->
+          <div id="theme-footer-tech" class="hidden grid grid-cols-4 gap-2 text-[9px] font-mono text-slate-400 uppercase tracking-wider">
+            <div class="col-span-3">
+              <span>Bayonet Tech // Office #4102, Sunny Enclave Kharar Mohali // +91 8360109185</span>
+            </div>
+            <div class="text-right font-bold text-slate-600">
+              <span>bayonettech.in</span>
+            </div>
+          </div>
+
+          <!-- Executive Classic Footer -->
+          <div id="theme-footer-classic" class="hidden text-center text-[10px] text-slate-400 font-serif border-t pt-4 border-slate-100">
+            <p>#4102, Sunny Enclave, Sector 125, Kharar, Mohali 140301 | info@bayonettech.in | +91 8360109185</p>
+            <p class="text-[9px] font-sans text-slate-300 mt-1 uppercase tracking-widest font-semibold">&copy; Bayonet Technologies — Confidential Systems Document</p>
+          </div>
+
+        </div>
+
+      </article>
+    </main>
+
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <script>
+    // Templates Database
+    const presets = {
+      offer: {
+        date: "June 20, 2026",
+        ref: "REF: BT-2026-092",
+        recipName: "Jane Doe",
+        recipTitle: "Senior Software Engineer",
+        recipCompany: "Technology Solutions Ltd",
+        recipAddr: "123 Innovators Blvd, Suite 400\nSilicon Valley, CA 94025",
+        subject: "Subject: Offer of Employment - Senior Software Engineer",
+        signName: "Ashok Mandial",
+        signTitle: "Chief Executive Officer",
+        signText: "A. Mandial",
+        body: `<p>We are thrilled to offer you the position of <strong>Senior Software Engineer</strong> at Bayonet Technologies. Your impressive technical background in Clean Architecture, microservices design, and .NET Core makes you an exceptional fit for our engineering division.</p>
+        <p>In this role, you will lead the architecture of our cloud-native enterprise platforms and collaborate with cross-functional product teams to deliver scalable solutions. Your employment will begin on <strong>July 15, 2026</strong>. Your initial reporting supervisor will be the VP of Engineering.</p>
+        <p>Please review the detailed terms of employment in the attached schedule. To accept this offer, sign and return a copy of this letter along with the signed schedule by <strong>June 30, 2026</strong>. We look forward to welcoming you to the Bayonet family!</p>`
+      },
+      proposal: {
+        date: "June 20, 2026",
+        ref: "REF: PROP-2026-441",
+        recipName: "Alex Chen",
+        recipTitle: "VP of Engineering",
+        recipCompany: "LogisticsCorp",
+        recipAddr: "89 Supply Chain Way, Bldg B\nSeattle, WA 98101",
+        subject: "Subject: Statement of Work – Enterprise API Modernization",
+        signName: "Ashok Mandial",
+        signTitle: "Chief Executive Officer",
+        signText: "A. Mandial",
+        body: `<p>This Statement of Work outlines the deliverables and timeline for the modernization of LogisticsCorp's legacy API endpoints into a high-performance, containerized .NET microservices architecture.</p>
+        <p>Our proposed development timeline spans 12 weeks, divided into three milestones: database optimization and caching layer setup (Weeks 1-4), core API development and authentication refactoring (Weeks 5-8), and end-to-end integration testing & production deployment (Weeks 9-12). All development will strictly adhere to Clean Architecture standards to guarantee long-term maintainability.</p>
+        <p>The total cost of the project is estimated at <strong>$45,000 USD</strong>, payable in three equal instalments at each milestone completion. We are ready to commence work immediately upon receipt of this signed agreement.</p>`
+      },
+      memo: {
+        date: "June 20, 2026",
+        ref: "REF: MEMO-2026-003",
+        recipName: "All Engineering & QA Staff",
+        recipTitle: "Internal Operations",
+        recipCompany: "Bayonet Technologies",
+        recipAddr: "Mohali Headquarters\nAll Offices & Remote",
+        subject: "Subject: Transition to AI-Assisted Development Workflows",
+        signName: "Ashok Mandial",
+        signTitle: "Chief Executive Officer",
+        signText: "A. Mandial",
+        body: `<p>Effective immediately, Bayonet Technologies is transitioning its core engineering workflows to integrate AI-assisted coding practices. This policy update aims to increase development velocity, automate boilerplate generation, and allow engineers to focus on architecture and system design.</p>
+        <p>All team members are expected to attend the onboarding training session scheduled for <strong>next Tuesday at 10:00 AM IST</strong>. Please review the updated security guidelines regarding repository access and external APIs in the company handbook prior to the session.</p>
+        <p>Thank you for your cooperation in keeping Bayonet Technologies at the forefront of software innovation.</p>`
+      }
+    };
+
+    // Load a preset template
+    function loadPreset(key) {
+      const data = presets[key];
+      if (!data) return;
+
+      // Update Form Inputs
+      document.getElementById("inputDate").value = data.date;
+      document.getElementById("inputRef").value = data.ref;
+      document.getElementById("inputRecipName").value = data.recipName;
+      document.getElementById("inputRecipTitle").value = data.recipTitle;
+      document.getElementById("inputRecipCompany").value = data.recipCompany;
+      document.getElementById("inputRecipAddr").value = data.recipAddr;
+      document.getElementById("inputSubject").value = data.subject;
+      document.getElementById("inputSignName").value = data.signName;
+      document.getElementById("inputSignTitle").value = data.signTitle;
+      document.getElementById("inputSignText").value = data.signText;
+      
+      // We convert HTML paragraphs back to text with newlines for the text editor textarea
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = data.body;
+      let textBody = "";
+      const paragraphs = tempDiv.querySelectorAll("p");
+      paragraphs.forEach((p, idx) => {
+        textBody += p.innerHTML.replace(/<br>/g, "\n").replace(/<strong>/g, "**").replace(/<\/strong>/g, "**") + (idx < paragraphs.length - 1 ? "\n\n" : "");
+      });
+      document.getElementById("inputBody").value = textBody;
+
+      // Update Preview
+      document.getElementById("date").innerText = data.date;
+      document.getElementById("ref").innerText = data.ref;
+      document.getElementById("ref-header").innerText = data.ref.replace("REF: ", "");
+      document.getElementById("recipName").innerText = data.recipName;
+      document.getElementById("recipTitle").innerText = data.recipTitle;
+      document.getElementById("recipCompany").innerText = data.recipCompany;
+      document.getElementById("recipAddr").innerText = data.recipAddr;
+      document.getElementById("subject").innerText = data.subject;
+      document.getElementById("signName").innerText = data.signName;
+      document.getElementById("signTitle").innerText = data.signTitle;
+      document.getElementById("signText").innerText = data.signText;
+      
+      // Render body HTML
+      document.getElementById("bodyText").innerHTML = data.body;
+      
+      // Update UI active states
+      document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.classList.remove("border-indigo-500", "bg-indigo-600/20", "text-indigo-400");
+      });
+      event.currentTarget.classList.add("border-indigo-500", "bg-indigo-600/20", "text-indigo-400");
+    }
+
+    // Sync Text from form inputs to preview
+    function syncText(elementId, value) {
+      const prevElement = document.getElementById(elementId);
+      if (prevElement) {
+        prevElement.innerText = value;
+      }
+      
+      // Special: update header ref sync
+      if (elementId === 'ref') {
+        document.getElementById("ref-header").innerText = value.replace("REF: ", "");
+      }
+    }
+
+    // Sync Text from contenteditable preview back to form inputs
+    function syncInput(inputId, value) {
+      const inputElement = document.getElementById(inputId);
+      if (inputElement) {
+        inputElement.value = value;
+      }
+      if (inputId === 'inputRef') {
+        document.getElementById("ref-header").innerText = value.replace("REF: ", "");
+      }
+    }
+
+    // Sync body and convert markdown double asterisks to strong tags
+    function syncBody(value) {
+      const parsedBody = value
+        .split('\n\n')
+        .map(p => {
+          // simple formatting replacement for bold
+          let html = p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          html = html.replace(/\n/g, '<br>');
+          return `<p>${html}</p>`;
+        })
+        .join('');
+      
+      document.getElementById("bodyText").innerHTML = parsedBody;
+    }
+
+    // Sync body contenteditable back to textarea
+    document.getElementById("bodyText").addEventListener('blur', function() {
+      // Simple HTML paragraph extraction
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = this.innerHTML;
+      let textBody = "";
+      const paragraphs = tempDiv.querySelectorAll("p");
+      if (paragraphs.length > 0) {
+        paragraphs.forEach((p, idx) => {
+          textBody += p.innerHTML.replace(/<br>/g, "\n").replace(/<strong>/g, "**").replace(/<\/strong>/g, "**") + (idx < paragraphs.length - 1 ? "\n\n" : "");
+        });
+      } else {
+        textBody = this.innerHTML.replace(/<br>/g, "\n").replace(/<strong>/g, "**").replace(/<\/strong>/g, "**");
+      }
+      document.getElementById("inputBody").value = textBody;
+    });
+
+    // Custom Design Themes toggling
+    function updateDesignTheme(theme) {
+      // Hide all headers & footers
+      document.getElementById("theme-header-modern").classList.add("hidden");
+      document.getElementById("theme-header-modern").classList.remove("flex");
+      document.getElementById("theme-header-tech").classList.add("hidden");
+      document.getElementById("theme-header-tech").classList.remove("flex");
+      document.getElementById("theme-header-classic").classList.add("hidden");
+      document.getElementById("theme-header-classic").classList.remove("flex");
+
+      document.getElementById("theme-footer-modern").classList.add("hidden");
+      document.getElementById("theme-footer-tech").classList.add("hidden");
+      document.getElementById("theme-footer-classic").classList.add("hidden");
+
+      if (theme === 'modern') {
+        document.getElementById("theme-header-modern").classList.remove("hidden");
+        document.getElementById("theme-header-modern").classList.add("flex");
+        document.getElementById("theme-footer-modern").classList.remove("hidden");
+      } else if (theme === 'tech') {
+        document.getElementById("theme-header-tech").classList.remove("hidden");
+        document.getElementById("theme-header-tech").classList.add("flex");
+        document.getElementById("theme-footer-tech").classList.remove("hidden");
+      } else if (theme === 'classic') {
+        document.getElementById("theme-header-classic").classList.remove("hidden");
+        document.getElementById("theme-header-classic").classList.add("flex");
+        document.getElementById("theme-footer-classic").classList.remove("hidden");
+      }
+    }
+
+    // Custom Accent Color updates
+    let currentAccent = 'indigo';
+    const accentClasses = {
+      indigo: {
+        logo: ['from-blue-600', 'to-indigo-600'],
+        text: 'text-indigo-600',
+        border: 'border-indigo-600',
+        gradient: ['from-blue-600', 'to-indigo-600']
+      },
+      emerald: {
+        logo: ['from-emerald-500', 'to-teal-500'],
+        text: 'text-emerald-600',
+        border: 'border-emerald-500',
+        gradient: ['from-emerald-500', 'to-teal-500']
+      },
+      slate: {
+        logo: ['from-slate-600', 'to-slate-800'],
+        text: 'text-slate-800',
+        border: 'border-slate-800',
+        gradient: ['from-slate-600', 'to-slate-800']
+      }
+    };
+
+    function updateAccentColor(color) {
+      const prev = accentClasses[currentAccent];
+      const next = accentClasses[color];
+      
+      // Update radio button styles / selection borders
+      ['indigo', 'emerald', 'slate'].forEach(c => {
+        const el = document.getElementById('color-' + c);
+        if (c === color) {
+          el.classList.add('ring-2');
+          el.classList.remove('ring-0');
+        } else {
+          el.classList.add('ring-0');
+          el.classList.remove('ring-2');
+        }
+      });
+
+      // Update logo box class
+      document.querySelectorAll(".logo-box").forEach(el => {
+        prev.logo.forEach(c => el.classList.remove(c));
+        next.logo.forEach(c => el.classList.add(c));
+      });
+
+      // Update text colors
+      document.querySelectorAll(".brand-accent-text").forEach(el => {
+        el.classList.remove(prev.text);
+        el.classList.add(next.text);
+      });
+
+      // Update watermark color
+      const watermarkSvg = document.querySelector("#watermark svg");
+      watermarkSvg.classList.remove(prev.text);
+      watermarkSvg.classList.add(next.text);
+
+      // Update signature font color
+      document.getElementById("signText").classList.remove(prev.text);
+      document.getElementById("signText").classList.add(next.text);
+
+      // Update border colors
+      document.querySelectorAll(".brand-accent-border").forEach(el => {
+        el.classList.remove(prev.border);
+        el.classList.add(next.border);
+      });
+
+      // Update gradient lines
+      document.querySelectorAll(".brand-accent-gradient").forEach(el => {
+        prev.gradient.forEach(c => el.classList.remove(c));
+        next.gradient.forEach(c => el.classList.add(c));
+      });
+
+      currentAccent = color;
+    }
+
+    // Font family changes
+    function updateFont(fontClass) {
+      const preview = document.getElementById("printPage");
+      preview.classList.remove("font-sans", "font-display", "font-serif");
+      preview.classList.add(fontClass);
+    }
+
+    // Font size changes
+    function updateFontSize(sizeClass) {
+      const body = document.getElementById("bodyText");
+      body.classList.remove("text-xs", "text-sm", "text-base");
+      body.classList.add(sizeClass);
+    }
+
+    // Line spacing changes
+    function updateLineHeight(heightClass) {
+      const body = document.getElementById("bodyText");
+      body.classList.remove("leading-normal", "leading-relaxed", "leading-loose");
+      body.classList.add(heightClass);
+    }
+
+    // Watermark Opacity slider
+    function updateWatermark(value) {
+      const opacity = value / 100;
+      document.getElementById("watermark").style.opacity = opacity;
+      document.getElementById("watermarkVal").innerText = value + '%';
+    }
+
+    // Toggle Blank Letterhead Mode
+    function toggleBlankMode(isTrue) {
+      const bodyContainer = document.getElementById("letterBodyContainer");
+      if (isTrue) {
+        bodyContainer.classList.add("hidden");
+        // Also disable details input panel to avoid confusion
+        document.querySelectorAll("#letterDetailsSection input, #letterDetailsSection textarea").forEach(el => {
+          el.disabled = true;
+          el.classList.add("opacity-50");
+        });
+        // Remove preset button selection highlight
+        document.querySelectorAll(".preset-btn").forEach(btn => {
+          btn.classList.add("opacity-50");
+          btn.disabled = true;
+        });
+      } else {
+        bodyContainer.classList.remove("hidden");
+        document.querySelectorAll("#letterDetailsSection input, #letterDetailsSection textarea").forEach(el => {
+          el.disabled = false;
+          el.classList.remove("opacity-50");
+        });
+        document.querySelectorAll(".preset-btn").forEach(btn => {
+          btn.classList.remove("opacity-50");
+          btn.disabled = false;
+        });
+      }
+    }
+
+    // On Load: initialize Offer Letter
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPreset('offer');
+    });
+  </script>
+</body>
+
+</html>

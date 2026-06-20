@@ -59,10 +59,8 @@ function onScroll() {
   // Navbar shadow
   if (window.scrollY > 50) {
     navbar.classList.add('shadow-md');
-    navbar.style.background = 'rgba(255,255,255,0.97)';
   } else {
     navbar.classList.remove('shadow-md');
-    navbar.style.background = 'rgba(255,255,255,0.9)';
   }
 
   // Active nav link (scroll-spy)
@@ -124,3 +122,37 @@ if (contactForm) {
     }, 1200);
   });
 }
+
+
+// Theme Toggle Logic
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const themeIconDark = document.getElementById('theme-icon-dark');
+  const themeIconLight = document.getElementById('theme-icon-light');
+
+  if (themeToggleBtn) {
+    // Set initial icon state
+    if (document.documentElement.classList.contains('light-mode')) {
+      themeIconDark.classList.remove('hidden');
+      themeIconLight.classList.add('hidden');
+    } else {
+      themeIconDark.classList.add('hidden');
+      themeIconLight.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light-mode');
+      
+      if (document.documentElement.classList.contains('light-mode')) {
+        localStorage.theme = 'light';
+        themeIconDark.classList.remove('hidden');
+        themeIconLight.classList.add('hidden');
+      } else {
+        localStorage.theme = 'dark';
+        themeIconDark.classList.add('hidden');
+        themeIconLight.classList.remove('hidden');
+      }
+    });
+  }
+});
+
